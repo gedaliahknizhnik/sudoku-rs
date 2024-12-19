@@ -43,6 +43,10 @@ impl Sudoku {
 
         return false;
     }
+
+    pub fn guesses(&self) -> u32 {
+        self.board.borrow().guesses()
+    }
 }
 
 impl std::fmt::Display for Sudoku {

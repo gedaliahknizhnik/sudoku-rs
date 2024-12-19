@@ -1,3 +1,4 @@
+use std::time::Instant;
 use sudoku_rs::sudoku::Sudoku;
 
 fn main() {
@@ -14,6 +15,17 @@ fn main() {
     ]);
 
     println!("Original:\n{}", sudoku);
-    sudoku.solve_by_backtrack(None);
+
+    let now = Instant::now();
+    {
+        sudoku.solve_by_backtrack(None);
+    }
+    let elapsed = now.elapsed();
+
     println!("Solved:\n{}", sudoku);
+    println!(
+        "Solution took {}ms and {} guesses",
+        elapsed.as_millis(),
+        sudoku.guesses()
+    );
 }
