@@ -1,5 +1,6 @@
 use crate::element::Element;
 
+#[derive(Debug)]
 pub struct Board {
     board: [[u8; 9]; 9],
 }
@@ -19,6 +20,7 @@ impl Board {
 
     pub fn guess(&mut self, row: usize, col: usize, guess: u8) -> bool {
         self.board[row][col] = guess;
+
         Element::evaluate(&self.row(row))
             && Element::evaluate(&self.column(col))
             && Element::evaluate(&self.subsquare(row / 3, col / 3))
@@ -61,6 +63,18 @@ impl Board {
 
     pub fn subsquare(&self, row: usize, col: usize) -> Vec<u8> {
         self.subsquare_iter(row, col).collect()
+    }
+}
+impl std::fmt::Display for Board {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        for row in self.board.iter() {
+            write!(f, "[ ")?;
+            for val in row[..row.len() - 1].iter() {
+                write!(f, "{}, ", val)?;
+            }
+            writeln!(f, "{} ]", row[row.len() - 1])?;
+        }
+        write!(f, "")
     }
 }
 

@@ -1,7 +1,6 @@
 use sudoku_rs::sudoku::Sudoku;
 
 fn main() {
-    println!("Hello, world!");
     let sudoku = Sudoku::new([
         [5, 3, 0, 0, 7, 0, 0, 0, 0],
         [6, 0, 0, 1, 9, 5, 0, 0, 0],
@@ -14,6 +13,7 @@ fn main() {
         [0, 0, 0, 0, 8, 0, 0, 7, 9],
     ]);
 
+    println!("Original:\n{}", sudoku);
     sudoku.solve_by_backtrack(None);
-    // println!("{}", sudoku);
+    println!("Solved:\n{}", sudoku);
 }
