@@ -1,8 +1,39 @@
+use crate::element::Element;
+
+#[derive(Debug)]
 pub struct Board {
     board: [[u8; 9]; 9],
+    guesses: u32,
 }
 
 impl Board {
+    pub fn new(board: [[u8; 9]; 9]) -> Board {
+        Board { board, guesses: 0 }
+    }
+
+    pub fn empty(&self, row: usize, col: usize) -> bool {
+        self.board[row][col] == 0
+    }
+
+    pub fn reset(&mut self, row: usize, col: usize) {
+        self.board[row][col] = 0;
+    }
+
+    pub fn guess(&mut self, row: usize, col: usize, guess: u8) -> bool {
+        self.board[row][col] = guess;
+        self.guesses += 1;
+
+        Element::evaluate(&self.row(row))
+            && Element::evaluate(&self.column(col))
+            && Element::evaluate(&self.subsquare(row / 3, col / 3))
+    }
+
+    // Accessors ***************************************************************
+
+    pub fn guesses(&self) -> u32 {
+        self.guesses
+    }
+
     fn row_iter(&self, ind: usize) -> impl Iterator<Item = &u8> {
         self.board[ind].iter()
     }
@@ -38,6 +69,26 @@ impl Board {
 
     pub fn subsquare(&self, row: usize, col: usize) -> Vec<u8> {
         self.subsquare_iter(row, col).collect()
+    }
+}
+
+fn valtoprint(val: u8) -> String {
+    if val > 0 {
+        val.to_string()
+    } else {
+        " ".to_string()
+    }
+}
+impl std::fmt::Display for Board {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        for row in self.board.iter() {
+            write!(f, "[ ")?;
+            for val in row[..row.len() - 1].iter() {
+                write!(f, "{}, ", valtoprint(*val))?;
+            }
+            writeln!(f, "{} ]", valtoprint(row[row.len() - 1]))?;
+        }
+        write!(f, "")
     }
 }
 

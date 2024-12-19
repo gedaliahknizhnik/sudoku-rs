@@ -1,6 +1,7 @@
 use std::collections::HashSet;
 
-struct Element {
+pub struct Element {
+    // TODO: Does this have to be pub for Board to access it?
     vals: HashSet<u8>,
     sum: u8,
 }
@@ -14,8 +15,12 @@ impl Element {
     }
 
     fn insert(&mut self, value: u8) -> bool {
-        if !(1..=9).contains(&value) {
-            panic!("Values must be in the range [1,9] for sudoku.")
+        if !(0..=9).contains(&value) {
+            panic!("Values must be in the range [0,9] for sudoku.")
+        }
+
+        if value == 0 {
+            return true;
         }
 
         let res = self.vals.insert(value);
@@ -36,20 +41,14 @@ impl Element {
                 return false;
             }
         }
-        el.check_sum()
+        return true;
+        // el.check_sum()
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    #[should_panic]
-    fn too_small() {
-        let mut el = Element::new();
-        el.insert(0);
-    }
 
     #[test]
     #[should_panic]
