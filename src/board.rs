@@ -1,8 +1,31 @@
+use crate::element::Element;
+
 pub struct Board {
     board: [[u8; 9]; 9],
 }
 
 impl Board {
+    pub fn new(board: [[u8; 9]; 9]) -> Board {
+        Board { board }
+    }
+
+    pub fn empty(&self, row: usize, col: usize) -> bool {
+        self.board[row][col] == 0
+    }
+
+    pub fn reset(&mut self, row: usize, col: usize) {
+        self.board[row][col] = 0;
+    }
+
+    pub fn guess(&mut self, row: usize, col: usize, guess: u8) -> bool {
+        self.board[row][col] = guess;
+        Element::evaluate(&self.row(row))
+            && Element::evaluate(&self.column(col))
+            && Element::evaluate(&self.subsquare(row / 3, col / 3))
+    }
+
+    // Accessors ***************************************************************
+
     fn row_iter(&self, ind: usize) -> impl Iterator<Item = &u8> {
         self.board[ind].iter()
     }

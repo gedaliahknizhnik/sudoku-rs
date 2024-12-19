@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-struct Element {
+pub struct Element { // TODO: Does this have to be pub for Board to access it?
     vals: HashSet<u8>,
     sum: u8,
 }
